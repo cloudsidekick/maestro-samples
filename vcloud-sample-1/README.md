@@ -14,23 +14,31 @@ http://docs.cloudsidekick.com/docs/cato/cloud/vcloud.html
 
 The template in this directory must be imported into Maestro. See the README.md file in the main repo directory for information on importing Maestro templates.
 
+Also, collect the following information from your vCloud vCenter application:
+
+* A Virtual Datacenter name
+
+* A Virtual Network name that dynamically assigns ip addresses that will be accessible via port 22 (ssh) from the Maestro server
+
+* One or more linux vApp templates in an accessible vCloud Catalog.
+
 
 vCloud Template Configuration
 -----------------------------
 
 The vCloud Sample Template must be configured slightly to work in your vCloud environment. Follow the steps below to perform this configuration. 
 
-    1. Login to the Cato application (default port 8082) and navigate to Maestro, Application Template in the menu. Edit "vCloud Sample Template" by clicking on the row.
+1. Login to the Cato application (default port 8082) and navigate to Maestro, Application Template in the menu. Edit "vCloud Sample Template" by clicking on the row.
 
-    2. In the template editor, expand the "Data" node and change the values for "datacenter" and "netname". 
+2. In the template editor, expand the "Data" node and change the values for "datacenter" and "netname". 
 
-        a. datacenter - corresponds to a Virtual Datacenter in vCloud. This will be the datacenter where the virtual server will be deployed.
+* datacenter - corresponds to a Virtual Datacenter in vCloud. This will be the datacenter where the virtual server will be deployed.
 
-        b. netname - a valid vCloud network name which should have externally accessible (from Maestro) ip addresses. 
+* netname - a valid vCloud network name which should have externally accessible (from Maestro) ip addresses. 
 
-    3. Expand the "Services" section. Under each of the defined services (named Service A, Service B and Service C) there is a "Data" section. Expand each data section and change the value for "vapptemplatename". The vapptemplatename will correspond to a linux vapp template found in one of the vCloud catalogs. For each service, you can elect to use the same vApp template or different one. However for this example they must be linux.
+3. Expand the "Services" section. Under each of the defined services (named Service A, Service B and Service C) there is a "Data" section. Expand each data section and change the value for "vapptemplatename". The vapptemplatename will correspond to a linux vapp template found in one of the vCloud catalogs. For each service, you can elect to use the same vApp template or different one. However for this example they must be linux.
 
-    4. Click the Save button in the upper right corner of the template editor.
+4. Click the Save button in the upper right corner of the template editor.
 
 
 Starting a Deployment
