@@ -1,0 +1,73 @@
+{
+    "Code": "062",
+    "Codeblocks": [
+        {
+            "Name": "MAIN",
+            "Steps": [
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "Wait until task is completed",
+                    "FunctionName": "while",
+                    "FunctionXML": "<function name=\"while\" snip=\"test\">\n\t\t\t\t\t<test input_type=\"text\">\"[[status]]\" == \"running\"</test>\n\t\t\t\t\t<action><function name=\"codeblock\" snip=\"codeblock\">\n\t\t\t\t\t<codeblock input_type=\"text\">checktask</codeblock>\n\t\t\t\t</function></action>\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 1,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 0,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": "\"[[status]]\" == \"running\"",
+                    "XPathPrefix": ""
+                }
+            ]
+        },
+        {
+            "Name": "checktask",
+            "Steps": [
+                {
+                    "Codeblock": "checktask",
+                    "Commented": false,
+                    "Description": "Check task status",
+                    "FunctionName": "vcloud_call_parse",
+                    "FunctionXML": "<function extension=\"vcloud.vcloud\" name=\"vcloud_call_parse\">\n\t\t\t\t\t<endpoint_name class=\"combo w300px\" dataset=\"ddDataSource_GetAllClouds\" datasource=\"function\" hr_after=\"true\" input_type=\"dropdown\" label=\"Cloud Endpoint Name\" />\n\t\t\t\t\t<path class=\"w90pct\" input_type=\"textarea\" label=\"Url or Method\" label_style=\"display: block;\" rows=\"1\">[[task_href]]</path>\n                    <method_or_href dataset=\"method|href\" datasource=\"local\" input_type=\"dropdown\" label=\"Method or Href\">href</method_or_href>\n                    <action dataset=\"GET|POST|DELETE|PUT\" datasource=\"local\" input_type=\"dropdown\" label=\"Action\">GET</action>\n\t\t\t\t\t<data class=\"w90pct\" input_type=\"textarea\" label=\"Data\" label_style=\"display: block;\" rows=\"3\" />\n\t\t\t\t\t<content_type class=\"w90pct\" input_type=\"text\" label=\"Content Type\" />\n\t\t\t\t\t<xpath class=\"w90pct\" input_type=\"textarea\" label=\"Xpath\" label_style=\"display: block;\" rows=\"1\">.</xpath>\n                    <values is_array=\"true\" label=\"Values to Extract\">\n                        <value label=\"Value\">\n                            <name input_type=\"text\" label=\"Attribute or Element Name\">status</name>\n                            <variable input_type=\"text\" label=\"Variable\">status</variable>\n                            <type dataset=\"attribute|element\" datasource=\"local\" input_type=\"dropdown\" label=\"Type\">attribute</type>\n                        </value>\n                    </values>\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 1,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 0,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": null,
+                    "XPathPrefix": ""
+                },
+                {
+                    "Codeblock": "checktask",
+                    "Commented": false,
+                    "Description": "sleep 5 second if task is still running",
+                    "FunctionName": "if",
+                    "FunctionXML": "<function name=\"if\">\n\t\t\t\t\t<tests>\n\t\t\t\t\t\t<test>\n\t\t\t\t\t\t\t<eval>\"[[status]]\" == \"running\"</eval>\n\t\t\t\t\t\t\t<action><function name=\"sleep\" snip=\"seconds\">\n\t\t\t\t\t<seconds input_type=\"text\" label=\"Sleep\">5</seconds>\n\t\t\t\t</function></action>\n\t\t\t\t\t\t</test>\n\t\t\t\t\t</tests>\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 2,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 0,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": null,
+                    "XPathPrefix": ""
+                }
+            ]
+        }
+    ],
+    "ConcurrentInstances": "",
+    "Description": "Called as a subtask. Requires variables \"status\" and \"task_href\"",
+    "IsDefaultVersion": true,
+    "MaxVersion": 1.0,
+    "Name": "vCloud Wait for Task",
+    "NextMajorVersion": "2.000",
+    "NextMinorVersion": "1.001",
+    "NumberOfApprovedVersions": 0,
+    "Parameters": "<parameters><parameter constraint=\"\" constraint_msg=\"\" encrypt=\"false\" id=\"p_b0c50e7d-d476-11e2-93ef-c8bcc89d4845\" maxlength=\"\" maxvalue=\"\" minlength=\"\" minvalue=\"\" prompt=\"true\" required=\"false\"><name>status</name><desc>Current task status</desc><values present_as=\"value\"><value id=\"pv_b0c5ce8f-d476-11e2-9b3a-c8bcc89d4845\" /></values></parameter><parameter constraint=\"\" constraint_msg=\"\" encrypt=\"false\" id=\"p_c05ee468-d476-11e2-9fa5-c8bcc89d4845\" maxlength=\"\" maxvalue=\"\" minlength=\"\" minvalue=\"\" prompt=\"true\" required=\"true\"><name>task_href</name><desc>The href of the vCloud task</desc><values present_as=\"value\"><value id=\"pv_c0601933-d476-11e2-963a-c8bcc89d4845\" /></values></parameter></parameters>",
+    "QueueDepth": "",
+    "Status": "Development",
+    "UseConnectorSystem": false,
+    "Version": 1.0
+}

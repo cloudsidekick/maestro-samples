@@ -1,0 +1,172 @@
+{
+    "Data": {
+        "datacenter": "CloudSideKick",
+        "netname": "Direct Internet connection"
+    },
+    "Options": {
+        "StartSequence": "Start",
+        "TerminateSequence": "Terminate"
+    },
+    "Sequences": [
+        {
+            "Description": "The Start Sequence will start all the services in this Deployment, and bring everything into a 'Running' status.",
+            "Icon": "46_48x48.png",
+            "Name": "Start",
+            "Options": {
+                "RequireRunState": "stopped",
+                "SetRunState": "running"
+            },
+            "Parameters": [
+                {
+                    "Description": "Select the vCloud endpoint",
+                    "Lookup": "#CLOUDS#",
+                    "Name": "cloud_name",
+                    "PresentAs": "dropdown"
+                }
+            ],
+            "Steps": [
+                {
+                    "Services": [
+                        {
+                            "Activity": "create",
+                            "CloudName": {
+                                "Ref": "cloud_name"
+                            },
+                            "DesiredState": "started",
+                            "InitialState": "starting",
+                            "Instances": "1",
+                            "Name": "Service A",
+                            "RunLevel": 1,
+                            "Task": "vCloud Launch Instance",
+                            "TaskVersion": "1.000"
+                        },
+                        {
+                            "Activity": "create",
+                            "CloudName": {
+                                "Ref": "cloud_name"
+                            },
+                            "DesiredState": "started",
+                            "InitialState": "starting",
+                            "Instances": "1",
+                            "Name": "Service B",
+                            "RunLevel": 1,
+                            "Task": "vCloud Launch Instance",
+                            "TaskVersion": "1.000"
+                        },
+                        {
+                            "Activity": "create",
+                            "CloudName": {
+                                "Ref": "cloud_name"
+                            },
+                            "DesiredState": "started",
+                            "InitialState": "starting",
+                            "Instances": "1",
+                            "Name": "Service C",
+                            "RunLevel": 1,
+                            "Task": "vCloud Launch Instance",
+                            "TaskVersion": "1.000"
+                        }
+                    ]
+                },
+                {
+                    "Services": [
+                        {
+                            "DesiredState": "running",
+                            "Name": "Service A",
+                            "RunLevel": 2,
+                            "Task": "vCloud Configure App"
+                        }
+                    ]
+                },
+                {
+                    "Services": [
+                        {
+                            "DesiredState": "running",
+                            "Name": "Service B",
+                            "RunLevel": 2,
+                            "Task": "vCloud Configure App"
+                        }
+                    ]
+                },
+                {
+                    "Services": [
+                        {
+                            "DesiredState": "running",
+                            "Name": "Service C",
+                            "RunLevel": 2,
+                            "Task": "vCloud Configure App"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Description": "Terminate all service instances",
+            "Icon": "45_48x48.png",
+            "Name": "Terminate",
+            "Options": {
+                "RequireRunState": "running",
+                "SetRunState": "stopped"
+            },
+            "Steps": [
+                {
+                    "Services": [
+                        {
+                            "Activity": "terminate",
+                            "DesiredState": "terminated",
+                            "InitialState": "stopping",
+                            "Name": "Service A",
+                            "RunLevel": 0,
+                            "Task": "vCloud Terminate Instance",
+                            "TaskVersion": ""
+                        },
+                        {
+                            "Activity": "terminate",
+                            "DesiredState": "terminated",
+                            "InitialState": "stopping",
+                            "Name": "Service B",
+                            "RunLevel": 0,
+                            "Task": "vCloud Terminate Instance",
+                            "TaskVersion": ""
+                        },
+                        {
+                            "Activity": "terminate",
+                            "DesiredState": "terminated",
+                            "InitialState": "stopping",
+                            "Name": "Service C",
+                            "RunLevel": 0,
+                            "Task": "vCloud Terminate Instance",
+                            "TaskVersion": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "Services": [
+        {
+            "Data": {
+                "sharedcred": "democreds",
+                "vapptemplatename": "CentOS 6.4 64Bit CLI"
+            },
+            "Description": "Service A",
+            "Name": "Service A"
+        },
+        {
+            "Data": {
+                "sharedcred": "democreds",
+                "vapptemplatename": "ubuntu1304"
+            },
+            "Description": "Service B",
+            "Name": "Service B"
+        },
+        {
+            "Data": {
+                "sharedcred": "democreds",
+                "vapptemplatename": "CentOS 6.4 64Bit CLI"
+            },
+            "Description": "Service C",
+            "Name": "Service C"
+        }
+    ]
+}
