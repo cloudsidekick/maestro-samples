@@ -36,6 +36,8 @@ The vCloud Sample Template must be configured slightly to work in your vCloud en
 
 4. Click the Save button in the upper right corner of the template editor.
 
+5. Configure a "shared credential". In the template there is a reference to a shared credential under each service. This value will be translated into a user id and password that is stored in Cato and has access to ssh innto the provisioned linux servers. If you choose to use different vApp templates and the user ids / passwords are different, you must create different credentials / aliases and change the sharedcred values under each service to the corresponding name. To configure shared credentials navigate to Security, Manage Shared Credentials in the Cato menu. Click Create. For the "Name" enter "democreds". In the user name and password fields, enter the ssh user name (such as root) and password. Click Save.
+
 
 Starting a Deployment
 ---------------------
