@@ -1,0 +1,187 @@
+{
+    "Data": {
+        "dbpassword": "Password1",
+        "keyname": "csk-demo",
+        "user": "ubuntu"
+    },
+    "Options": {
+        "StartSequence": "Start",
+        "TerminateSequence": "Terminate"
+    },
+    "Sequences": [
+        {
+            "Description": "The Start Sequence will start all the services in this Deployment, and bring everything into a 'Running' status.",
+            "Icon": "46_48x48.png",
+            "Name": "Start",
+            "Options": {
+                "RequireRunState": "stopped",
+                "SetRunState": "running"
+            },
+            "Steps": [
+                {
+                    "Services": [
+                        {
+                            "Activity": "create",
+                            "CloudName": "us-east-1",
+                            "DesiredState": "started",
+                            "InitialState": "starting",
+                            "Instances": "1",
+                            "Name": "HAProxy",
+                            "RunLevel": 1,
+                            "Task": "Boot Instance"
+                        },
+                        {
+                            "Activity": "create",
+                            "CloudName": "us-east-1",
+                            "DesiredState": "started",
+                            "InitialState": "starting",
+                            "Instances": "3",
+                            "Name": "Tomcat",
+                            "RunLevel": 1,
+                            "Task": "Boot Instance"
+                        },
+                        {
+                            "Activity": "create",
+                            "CloudName": "us-east-1",
+                            "DesiredState": "started",
+                            "InitialState": "starting",
+                            "Instances": "1",
+                            "Name": "MySQL",
+                            "RunLevel": 1,
+                            "Task": "Boot Instance"
+                        }
+                    ]
+                },
+                {
+                    "Services": [
+                        {
+                            "DesiredState": "installed",
+                            "Name": "HAProxy",
+                            "RunLevel": 2,
+                            "Task": "Install HAProxy"
+                        },
+                        {
+                            "DesiredState": "installed",
+                            "Name": "Tomcat",
+                            "RunLevel": 1,
+                            "Task": "Install Tomcat"
+                        },
+                        {
+                            "DesiredState": "installed",
+                            "Name": "MySQL",
+                            "RunLevel": 1,
+                            "Task": "Install MySQL"
+                        }
+                    ]
+                },
+                {
+                    "Services": [
+                        {
+                            "DesiredState": "running",
+                            "Name": "MySQL",
+                            "RunLevel": 2,
+                            "Task": "Configure MySQL"
+                        }
+                    ]
+                },
+                {
+                    "Services": [
+                        {
+                            "DesiredState": "running",
+                            "Name": "Tomcat",
+                            "RunLevel": 1,
+                            "Task": "Configure Tomcat"
+                        }
+                    ]
+                },
+                {
+                    "Services": [
+                        {
+                            "DesiredState": "running",
+                            "Name": "HAProxy",
+                            "RunLevel": 2,
+                            "Task": "Configure HAProxy"
+                        }
+                    ]
+                },
+                {
+                    "Services": [
+                        {
+                            "DesiredState": "registered",
+                            "Name": "Tomcat",
+                            "RunLevel": 2,
+                            "Task": "Register Tomcat"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Description": "Terminate all service instances",
+            "Icon": "45_48x48.png",
+            "Name": "Terminate",
+            "Options": {
+                "SetRunState": "stopped"
+            },
+            "Steps": [
+                {
+                    "Services": [
+                        {
+                            "Activity": "terminate",
+                            "DesiredState": "terminated",
+                            "InitialState": "stopping",
+                            "Name": "MySQL",
+                            "RunLevel": 0,
+                            "Task": "Terminate Instance"
+                        },
+                        {
+                            "Activity": "terminate",
+                            "DesiredState": "terminated",
+                            "InitialState": "stopping",
+                            "Name": "HAProxy",
+                            "RunLevel": 0,
+                            "Task": "Terminate Instance"
+                        },
+                        {
+                            "Activity": "terminate",
+                            "DesiredState": "terminated",
+                            "InitialState": "stopping",
+                            "Name": "Tomcat",
+                            "RunLevel": 0,
+                            "Task": "Terminate Instance"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "Services": [
+        {
+            "Data": {
+                "image": "ami-ef795786",
+                "security_group": "csk-demo",
+                "type": "t1.micro"
+            },
+            "Description": "HA Proxy Load Balancer",
+            "Name": "HAProxy"
+        },
+        {
+            "Data": {
+                "image": "ami-ef795786",
+                "security_group": "csk-demo",
+                "type": "m1.small"
+            },
+            "Description": "MySQL Database Server",
+            "Name": "MySQL"
+        },
+        {
+            "Data": {
+                "image": "ami-ef795786",
+                "security_group": "csk-demo",
+                "type": "t1.micro"
+            },
+            "Description": "Tomcat Application Server",
+            "Name": "Tomcat"
+        }
+    ]
+}

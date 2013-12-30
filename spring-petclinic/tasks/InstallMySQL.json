@@ -1,0 +1,83 @@
+{
+    "Code": "petclinic 101",
+    "Codeblocks": [
+        {
+            "Name": "MAIN",
+            "Steps": [
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "",
+                    "FunctionName": "set_variable",
+                    "FunctionXML": "<function name=\"set_variable\">\n\t\t\t\t\t<variables label=\"Variables\">\n\t\t\t\t\t\t<variable label=\"Variable\">\n\t\t\t\t\t\t\t<name input_type=\"text\" label=\"Name\">verbose</name>\n\t\t\t\t\t\t\t<value input_type=\"text\" label=\"Value\" />\n\t\t\t\t\t\t\t<modifier input_type=\"select\" label=\"Modifier\">DEFAULT</modifier>\n\t\t\t\t\t\t</variable>\n\t\t\t\t\t</variables>\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 1,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 0,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": null,
+                    "XPathPrefix": ""
+                },
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "get global settings from datastore",
+                    "FunctionName": "get_deployment_value",
+                    "FunctionXML": "<function extension=\"maestro.datastore\" name=\"get_deployment_value\">\n\t\t\t\t\t<scope dataset=\"Deployment|Service\" datasource=\"local\" input_type=\"dropdown\" label=\"Scope\">Deployment</scope>\n\t\t\t\t\t<pairs is_array=\"true\" label=\"Key Value Pairs\">\n\t\t\t\t\t\t<pair label=\"Pair\">\n\t\t\t\t\t\t\t<key input_type=\"text\" label=\"Key\">keyname</key>\n\t\t\t\t\t\t\t<variable_name input_type=\"text\" label=\"Variable\" required=\"true\">key</variable_name>\n\t\t\t\t\t\t</pair>\n\t\t\t\t\t<pair label=\"Pair\">\n\t\t\t\t\t\t\t<key input_type=\"text\" label=\"Key\">user</key>\n\t\t\t\t\t\t\t<variable_name input_type=\"text\" label=\"Variable\" required=\"true\">user</variable_name>\n\t\t\t\t\t\t</pair><pair label=\"Pair\">\n\t\t\t\t\t\t\t<key input_type=\"text\" label=\"Key\">dbpassword</key>\n\t\t\t\t\t\t\t<variable_name input_type=\"text\" label=\"Variable\" required=\"true\">dbpassword</variable_name>\n\t\t\t\t\t\t</pair></pairs>\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 2,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 0,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": null,
+                    "XPathPrefix": ""
+                },
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "ssh to db server",
+                    "FunctionName": "new_connection",
+                    "FunctionXML": "<function name=\"new_connection\" snip=\"conn_name\">\n\t\t\t\t\t<conn_type input_type=\"select\">ssh</conn_type>\n\t\t\t\t\t<cloud_name input_type=\"dropdown\" style=\"combo\" />\n\t\t\t\t\t<asset input_type=\"text\">address=[[_HOST_ADDRESS]] shared_cred=[[key]] user=[[user]]</asset>\n\t\t\t\t\t<conn_name class=\"w200px\" help=\"Name this connection for reference in the Task.\" input_type=\"text\" label=\"Connection Name\" required=\"true\">CONN1</conn_name>\n\t\t\t\t\t<debug break_after=\"true\" input_type=\"checkbox\" label=\"Debug\" />\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 3,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 0,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": "CONN1",
+                    "XPathPrefix": ""
+                },
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "install mysql and set bind address",
+                    "FunctionName": "cmd_line",
+                    "FunctionXML": "<function name=\"cmd_line\" parse_method=\"2\" snip=\"command\" variables=\"true\">\n\t\t\t\t\t<conn_name break_after=\"true\" connection_picker=\"true\" input_type=\"text\" label=\"Connection\" required=\"true\">CONN1</conn_name>\n\t\t\t\t\t<command class=\"w95pct\" input_type=\"textarea\" label=\"Command\" label_style=\"display: block;\" required=\"true\" rows=\"3\">/bin/bash &lt;&lt;EOF\nsleep 10\nsudo apt-get -f [[verbose]] install\nsudo apt-get update [[verbose]]\nexport DEBIAN_FRONTEND=noninteractive\necho \"mysql-server mysql-server/root_password select [[dbpassword]]\" | sudo debconf-set-selections\necho \"mysql-server mysql-server/root_password_again select [[dbpassword]]\" | sudo debconf-set-selections\nsudo apt-get -y [[verbose]] install mysql-server unzip\nsudo sed -i \"s|^bind-address.*$|#\\\\0|\" /etc/mysql/my.cnf\nIP_ADDRESS=`/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`\nsudo sed -i '/\\[mysqld\\]/a \\bind-address = '\"$IP_ADDRESS\"'' /etc/mysql/my.cnf\nsleep 10 \nsudo service mysql start\nEOF</command>\n\t\t\t\t\t<timeout break_after=\"true\" input_type=\"text\" label=\"Timeout\" option_tab=\"Options\">1000</timeout>\n\t\t\t\t\t<positive_response break_after=\"true\" input_type=\"text\" label=\"Positive Response\" option_tab=\"Options\" />\n\t\t\t\t\t<negative_response break_after=\"true\" input_type=\"text\" label=\"Negative Response\" option_tab=\"Options\" />\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 4,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 2,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": "/bin/bash <<EOF\nsleep 10\nsudo apt-get -f [[verbose]] install\nsudo apt-get u",
+                    "XPathPrefix": ""
+                }
+            ]
+        }
+    ],
+    "ConcurrentInstances": "",
+    "Description": "Installs MySQL on Ubuntu",
+    "IsDefaultVersion": true,
+    "MaxVersion": 1.0,
+    "Name": "Install MySQL",
+    "NextMajorVersion": "2.000",
+    "NextMinorVersion": "1.001",
+    "NumberOfApprovedVersions": 0,
+    "Parameters": "",
+    "QueueDepth": "",
+    "Status": "Development",
+    "UseConnectorSystem": false,
+    "Version": 1.0
+}

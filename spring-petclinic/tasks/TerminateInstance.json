@@ -1,0 +1,38 @@
+{
+    "Code": "petclinic 107",
+    "Codeblocks": [
+        {
+            "Name": "MAIN",
+            "Steps": [
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "terminate ec2 instance",
+                    "FunctionName": "if",
+                    "FunctionXML": "<function name=\"if\">\n\t\t\t\t\t<tests>\n\t\t\t\t\t\t<test>\n\t\t\t\t\t\t\t<eval>\"[[_HOST]]\" &gt; \"\"</eval>\n\t\t\t\t\t\t\t<action><function name=\"aws_ec2_TerminateInstances\">\n\t\t\t\t\t\t<aws_region class=\"combo w300px\" dataset=\"ddDataSource_GetAWSClouds\" datasource=\"function\" hr_after=\"true\" input_type=\"dropdown\" label=\"AWS Region\" />\n\t\t\t\t\t\t<InstanceId.n is_array=\"true\">\n\t\t\t\t\t\t\t<InstanceId input_type=\"text\">[[_HOST]]</InstanceId>\n\t\t\t\t\t\t</InstanceId.n>\n\t\t\t\t\t\t<result_name break_before=\"true\" input_type=\"text\" label=\"Result Variable\" />\n\t\t\t\t\t</function></action>\n\t\t\t\t\t\t</test>\n\t\t\t\t\t</tests>\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 1,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 0,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": null,
+                    "XPathPrefix": ""
+                }
+            ]
+        }
+    ],
+    "ConcurrentInstances": "",
+    "Description": "terminates an ec2 instance",
+    "IsDefaultVersion": true,
+    "MaxVersion": 1.0,
+    "Name": "Terminate Instance",
+    "NextMajorVersion": "2.000",
+    "NextMinorVersion": "1.001",
+    "NumberOfApprovedVersions": 0,
+    "Parameters": "",
+    "QueueDepth": "",
+    "Status": "Development",
+    "UseConnectorSystem": false,
+    "Version": 1.0
+}

@@ -1,0 +1,98 @@
+{
+    "Code": "petclinic 104",
+    "Codeblocks": [
+        {
+            "Name": "MAIN",
+            "Steps": [
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "get global settings from deployment datastore",
+                    "FunctionName": "get_deployment_value",
+                    "FunctionXML": "<function extension=\"maestro.datastore\" name=\"get_deployment_value\">\n\t\t\t\t\t<scope dataset=\"Deployment|Service\" datasource=\"local\" input_type=\"dropdown\" label=\"Scope\">Deployment</scope>\n\t\t\t\t\t<pairs is_array=\"true\" label=\"Key Value Pairs\">\n\t\t\t\t\t\t<pair label=\"Pair\">\n\t\t\t\t\t\t\t<key input_type=\"text\" label=\"Key\">keyname</key>\n\t\t\t\t\t\t\t<variable_name input_type=\"text\" label=\"Variable\" required=\"true\">key</variable_name>\n\t\t\t\t\t\t</pair>\n\t\t\t\t\t<pair label=\"Pair\">\n\t\t\t\t\t\t\t<key input_type=\"text\" label=\"Key\">user</key>\n\t\t\t\t\t\t\t<variable_name input_type=\"text\" label=\"Variable\" required=\"true\">user</variable_name>\n\t\t\t\t\t\t</pair><pair label=\"Pair\">\n\t\t\t\t\t\t\t<key input_type=\"text\" label=\"Key\">dbpassword</key>\n\t\t\t\t\t\t\t<variable_name input_type=\"text\" label=\"Variable\" required=\"true\">dbpassword</variable_name>\n\t\t\t\t\t\t</pair></pairs>\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 1,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 0,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": null,
+                    "XPathPrefix": ""
+                },
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "get the mysql db address",
+                    "FunctionName": "get_service_hosts",
+                    "FunctionXML": "<function extension=\"maestro.maestro\" name=\"get_service_hosts\">\n\t\t\t\t\t<service_name input_type=\"text\" label=\"Service Name (input, optional)\">MySQL</service_name>\n\t\t\t\t\t<index_in input_type=\"text\" label=\"Instance Index (input, optional)\" />\n\t\t\t\t\t<host_name_out input_type=\"text\" label=\"Host Name (output)\">dbhost</host_name_out>\n\t\t\t\t\t<address_out input_type=\"text\" label=\"Host Address (output)\">dbaddress</address_out>\n\t\t\t\t\t<instance_name input_type=\"text\" label=\"Instance Name (output)\" />\n\t\t\t\t\t<instance_index input_type=\"text\" label=\"Instance Index (output)\" />\n\t\t\t\t\t<service_name_out input_type=\"text\" label=\"Service Name (output)\" />\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 2,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 0,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": null,
+                    "XPathPrefix": ""
+                },
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "ssh to tomcat server",
+                    "FunctionName": "new_connection",
+                    "FunctionXML": "<function name=\"new_connection\" snip=\"conn_name\">\n\t\t\t\t\t<conn_type input_type=\"select\">ssh</conn_type>\n\t\t\t\t\t<cloud_name input_type=\"dropdown\" style=\"combo\" />\n\t\t\t\t\t<asset input_type=\"text\">address=[[_HOST_ADDRESS]] shared_cred=[[key]] user=[[user]]</asset>\n\t\t\t\t\t<conn_name class=\"w200px\" help=\"Name this connection for reference in the Task.\" input_type=\"text\" label=\"Connection Name\" required=\"true\">CONN1</conn_name>\n\t\t\t\t\t<debug break_after=\"true\" input_type=\"checkbox\" label=\"Debug\" />\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 3,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 0,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": "CONN1",
+                    "XPathPrefix": ""
+                },
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "download and install petclinic war file",
+                    "FunctionName": "cmd_line",
+                    "FunctionXML": "<function name=\"cmd_line\" parse_method=\"2\" snip=\"command\" variables=\"true\">\n\t\t\t\t\t<conn_name break_after=\"true\" connection_picker=\"true\" input_type=\"text\" label=\"Connection\" required=\"true\">CONN1</conn_name>\n\t\t\t\t\t<command class=\"w95pct\" input_type=\"textarea\" label=\"Command\" label_style=\"display: block;\" required=\"true\" rows=\"3\">/bin/bash &lt;&lt;EOF\nsudo curl -Lk --output /var/lib/tomcat7/webapps/petclinic.war http://downloads.cloudsidekick.com/petclinic.war\ncd /var/lib/tomcat7/webapps\nsudo unzip petclinic.war\nEOF</command>\n\t\t\t\t\t<timeout break_after=\"true\" input_type=\"text\" label=\"Timeout\" option_tab=\"Options\" />\n\t\t\t\t\t<positive_response break_after=\"true\" input_type=\"text\" label=\"Positive Response\" option_tab=\"Options\" />\n\t\t\t\t\t<negative_response break_after=\"true\" input_type=\"text\" label=\"Negative Response\" option_tab=\"Options\" />\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 4,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 2,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": "/bin/bash <<EOF\nsudo curl -Lk --output /var/lib/tomcat7/webapps/petclinic.w",
+                    "XPathPrefix": ""
+                },
+                {
+                    "Codeblock": "MAIN",
+                    "Commented": false,
+                    "Description": "point application to mysql db",
+                    "FunctionName": "cmd_line",
+                    "FunctionXML": "<function name=\"cmd_line\" parse_method=\"2\" snip=\"command\" variables=\"true\">\n\t\t\t\t\t<conn_name break_after=\"true\" connection_picker=\"true\" input_type=\"text\" label=\"Connection\" required=\"true\">CONN1</conn_name>\n\t\t\t\t\t<command class=\"w95pct\" input_type=\"textarea\" label=\"Command\" label_style=\"display: block;\" required=\"true\" rows=\"3\">echo \"jdbc.driverClassName=com.mysql.jdbc.Driver\njdbc.url=jdbc:mysql://[[dbaddress]]:3306/petclinic\njdbc.username=root\njdbc.password=[[dbpassword]]\njdbc.initLocation=classpath:db/mysql/initDB.sql\njdbc.dataLocation=classpath:db/mysql/populateDB.sql\nhibernate.dialect=org.hibernate.dialect.MySQLDialect\njpa.database=MYSQL\" | sudo tee /var/lib/tomcat7/webapps/petclinic/WEB-INF/classes/spring/data-access.properties</command>\n\t\t\t\t\t<timeout break_after=\"true\" input_type=\"text\" label=\"Timeout\" option_tab=\"Options\" />\n\t\t\t\t\t<positive_response break_after=\"true\" input_type=\"text\" label=\"Positive Response\" option_tab=\"Options\" />\n\t\t\t\t\t<negative_response break_after=\"true\" input_type=\"text\" label=\"Negative Response\" option_tab=\"Options\" />\n\t\t\t\t</function>",
+                    "IsValid": true,
+                    "Locked": false,
+                    "Order": 5,
+                    "OutputColumnDelimiter": 0,
+                    "OutputParseType": 2,
+                    "OutputRowDelimiter": 0,
+                    "ValueSnip": "echo \"jdbc.driverClassName=com.mysql.jdbc.Driver\njdbc.url=jdbc:mysql://[[db",
+                    "XPathPrefix": ""
+                }
+            ]
+        }
+    ],
+    "ConcurrentInstances": "",
+    "Description": "install application files and configure tomcat to point to mysql db",
+    "IsDefaultVersion": true,
+    "MaxVersion": 1.0,
+    "Name": "Configure Tomcat",
+    "NextMajorVersion": "2.000",
+    "NextMinorVersion": "1.001",
+    "NumberOfApprovedVersions": 0,
+    "Parameters": "",
+    "QueueDepth": "",
+    "Status": "Development",
+    "UseConnectorSystem": false,
+    "Version": 1.0
+}
